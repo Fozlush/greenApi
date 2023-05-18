@@ -1,0 +1,13 @@
+._ {
+  width: 100%;
+  height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--primary);
+  .buttons_block {
+    display: flex;
+    justify-content: center;
+  }
+}

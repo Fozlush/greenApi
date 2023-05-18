@@ -1,0 +1,27 @@
+._ {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.chatlist {
+  width: 30%;
+  height: 100%;
+  background-color: var(--background-default);
+  border-right: 1px solid var(--primary);
+  &_header {
+    width: 100%;
+    height: 60px;
+    padding: 10px 16px;
+    background-color: var(--intro-background);
+  }
+  .addchat_button {
+    width: 100%;
+    height: 72px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

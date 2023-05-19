@@ -4,9 +4,7 @@ const DeleteNotification = (idInstance: string, apiTokenInstance: string, receip
   const request = fetch(url, {
     method: 'DELETE'
   })
-  request.then(response => response.json()).then(commits => {
-    
-  });
+
   return request
 }
 

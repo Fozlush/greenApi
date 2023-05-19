@@ -14,7 +14,7 @@ const LoginScreen: FC = () => {
   const changeApiTokenInstance = (e: React.ChangeEvent<HTMLInputElement>) => {
     setApiTokenInstance(e.target.value)
   }
-  const clickAuth = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const clickAuth = () => {
     if(!IdInstance || !ApiTokenInstance){
       return
     }

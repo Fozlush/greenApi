@@ -5,7 +5,6 @@ import { AddChat, Chat } from "../../layout"
 import style from './mainScreen.module.scss'
 
 const MainScreen: FC = () => {
-  const [avatar, setAvatar] = useState('')
   const [addChat, setAddChat] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [contactInfo, setContactInfo] = useState([])
@@ -24,6 +23,7 @@ const MainScreen: FC = () => {
       requestContact.then(response => response.json()).then(commits => {
         setContactInfo(commits)
         setIsChatOpen(true)
+        setAddChat(false)
       });
     }
   }

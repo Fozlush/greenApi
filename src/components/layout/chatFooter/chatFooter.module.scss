@@ -1,5 +1,13 @@
 ._ {
   width: 100%;
   height: 60px;
+  padding: 5px 16px;
   background-color: var(--intro-background);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  textarea {
+    width: 80%;
+    height: 100%;
+  }
 }

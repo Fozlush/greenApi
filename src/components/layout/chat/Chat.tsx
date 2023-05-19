@@ -2,6 +2,7 @@ import { FC, useState, useEffect, useContext } from 'react'
 import AuthContext from "../../../context/Context"
 import getChatHistory from '../../../http/GetChatHistory'
 import ReceiveNotification from '../../../http/ReceiveNotification'
+import DeleteNotification from '../../../http/DeleteNotification'
 import { ChatFooter } from '..'
 import style from './chat.module.scss'
 
@@ -16,14 +17,45 @@ interface IChat {
 const Chat: FC<IChat> = ({contactInfo}) => {
   const [history, setHistory] = useState([])
   const {IdInstanceC, ApiTokenInstanceC} = useContext(AuthContext)
-
-  useEffect(() => {
-    console.trace()
+  const startHistory = () => {
     const requestHistory = getChatHistory(IdInstanceC, ApiTokenInstanceC, contactInfo.chatId)
     requestHistory.then(response => response.json()).then(commits => {
       setHistory(commits.reverse())
     });
-    ReceiveNotification(IdInstanceC, ApiTokenInstanceC)
+  }
+  const fetchNotification = () => {
+    const requestReceiveNotification = ReceiveNotification(IdInstanceC, ApiTokenInstanceC)
+    requestReceiveNotification.then(response => response.json()).then(commits => {
+      if(commits){
+        try{
+          if(commits.body.typeWebhook === 'outgoingAPIMessageReceived' && commits.body.senderData.chatId === contactInfo.chatId){
+            const newMessage = {
+              idMessage: commits.body.idMessage,
+              type: 'outgoing',
+              textMessage: commits.body.messageData.extendedTextMessageData.text
+            }
+            history.push(newMessage)
+            setHistory([...history])
+          }else if(commits.body.typeWebhook === 'incomingMessageReceived' && commits.body.senderData.chatId === contactInfo.chatId){
+            const newMessage = {
+              idMessage: commits.body.idMessage,
+              type: 'incoming',
+              textMessage: commits.body.messageData.textMessageData.textMessage
+            }
+            history.push(newMessage)
+            setHistory([...history])
+          }
+        }catch(e){
+          console.log('Кажется пришло не текстовое сообщение(')
+        }
+        DeleteNotification(IdInstanceC, ApiTokenInstanceC, commits.receiptId)
+      }
+    })
+  }
+
+  useEffect(() => {
+    const notificationInterval = setInterval(fetchNotification, 5000)
+    return () => clearTimeout(notificationInterval)
   }, [])
   return (
     <div className={style._}>

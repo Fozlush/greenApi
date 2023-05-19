@@ -12,6 +12,7 @@ const ChatFooter: FC = ({chatId}) => {
   }
   const send = () => {
     const requestSend = SendMessage(IdInstanceC, ApiTokenInstanceC, chatId, message)
+    setMessage('')
   }
   return (
     <div className={style._}>

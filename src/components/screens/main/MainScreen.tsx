@@ -1,13 +1,19 @@
-import { FC, useState, useEffect, useContext } from "react"
+import { FC, useState, useContext } from "react"
 import AuthContext from "../../../context/Context"
 import getContactInfo from "../../../http/GetContactInfo"
 import { AddChat, Chat } from "../../layout"
 import style from './mainScreen.module.scss'
 
+interface IContactInfo {
+  avatar: string
+  chatId: string
+  name: string
+}
+
 const MainScreen: FC = () => {
   const [addChat, setAddChat] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
-  const [contactInfo, setContactInfo] = useState([])
+  const [contactInfo, setContactInfo] = useState<IContactInfo>({avatar: '', chatId: '', name: ''})
   const {IdInstanceC, ApiTokenInstanceC} = useContext(AuthContext)
   const clickAddChat = () => {
     setAddChat(true)

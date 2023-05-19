@@ -1,6 +1,5 @@
 import { FC, useState, useEffect, useContext } from 'react'
 import AuthContext from "../../../context/Context"
-import getChatHistory from '../../../http/GetChatHistory'
 import ReceiveNotification from '../../../http/ReceiveNotification'
 import DeleteNotification from '../../../http/DeleteNotification'
 import { ChatFooter } from '..'
@@ -14,22 +13,23 @@ interface IChat {
   }
 }
 
+interface IMessage {
+  idMessage: string
+  type: string
+  textMessage: string
+}
+
 const Chat: FC<IChat> = ({contactInfo}) => {
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState<IMessage[]>([])
   const {IdInstanceC, ApiTokenInstanceC} = useContext(AuthContext)
-  const startHistory = () => {
-    const requestHistory = getChatHistory(IdInstanceC, ApiTokenInstanceC, contactInfo.chatId)
-    requestHistory.then(response => response.json()).then(commits => {
-      setHistory(commits.reverse())
-    });
-  }
+
   const fetchNotification = () => {
     const requestReceiveNotification = ReceiveNotification(IdInstanceC, ApiTokenInstanceC)
     requestReceiveNotification.then(response => response.json()).then(commits => {
       if(commits){
         try{
           if(commits.body.typeWebhook === 'outgoingAPIMessageReceived' && commits.body.senderData.chatId === contactInfo.chatId){
-            const newMessage = {
+            const newMessage:IMessage = {
               idMessage: commits.body.idMessage,
               type: 'outgoing',
               textMessage: commits.body.messageData.extendedTextMessageData.text
@@ -37,7 +37,7 @@ const Chat: FC<IChat> = ({contactInfo}) => {
             history.push(newMessage)
             setHistory([...history])
           }else if(commits.body.typeWebhook === 'incomingMessageReceived' && commits.body.senderData.chatId === contactInfo.chatId){
-            const newMessage = {
+            const newMessage:IMessage = {
               idMessage: commits.body.idMessage,
               type: 'incoming',
               textMessage: commits.body.messageData.textMessageData.textMessage

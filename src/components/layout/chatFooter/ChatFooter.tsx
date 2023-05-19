@@ -4,14 +4,18 @@ import AuthContext from "../../../context/Context"
 import { Button } from '../../ui'
 import style from './chatFooter.module.scss'
 
-const ChatFooter: FC = ({chatId}) => {
+interface IChatFooter {
+  chatId: string
+}
+
+const ChatFooter: FC<IChatFooter> = ({chatId}) => {
   const [message, setMessage] = useState('')
   const {IdInstanceC, ApiTokenInstanceC} = useContext(AuthContext)
   const messageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value)
   }
   const send = () => {
-    const requestSend = SendMessage(IdInstanceC, ApiTokenInstanceC, chatId, message)
+    SendMessage(IdInstanceC, ApiTokenInstanceC, chatId, message)
     setMessage('')
   }
   return (

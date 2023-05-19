@@ -2,7 +2,11 @@ import { FC, useState } from 'react'
 import { Button, Input } from "../../ui"
 import style from './addChat.module.scss'
 
-const AddChat: FC = ({functions}) => {
+interface IAddChat {
+  functions: any
+}
+
+const AddChat: FC<IAddChat> = ({functions}) => {
   const [chatId, setChatId] = useState('')
   const changechatId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChatId(e.target.value)
